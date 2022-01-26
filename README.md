@@ -23,6 +23,7 @@ SDSF job output from ASMT13. Job was executed in a z/OS 2.04 environment.
 For display purposes, WTO was utilized to display contents of CHARLIST (as output string).
  
  The data to be converted is refered to by HEXLIST.
+ 
      HEXLIST  DS    0CL8                    HEX BYTES TO CONVERT INTO CHAR                       
               DC    CL6'ABC123'                                                                  
               DC    XL2'04AF'      
