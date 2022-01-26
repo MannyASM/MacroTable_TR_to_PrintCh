@@ -7,9 +7,10 @@ A working HLASM model showing how to convert from hex into character for display
 Source:  Carmine Cannatello - "Advanced Assembler Language and MVS Interfaces"
 
 Modules
-ASMT13.JCL
-  Uses IBM proc HLASMCLG to assemble, link and execute the source program.
+ASMT13.JCL - Uses IBM proc HLASMCLG to assemble, link and execute the source program.
   
   Note: HEXLIST contains the characters we want to translate to printable format.
         It is defined in two parts: C(haracter) and X (hex).
-        
+
+HEXTBL.MACRO - Contains a translation table used with the TR instruction.
+
