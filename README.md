@@ -1,6 +1,6 @@
 # MacroTable_TR_to_PrintCh
 A working HLASM model showing how to convert hex data into character format for display purposes.
-1. Uses HEXTBL macro to define a 256-byte table (fixed content, no conditional asembler). 
+1. Uses HEXTBL macro to define a 256-byte table (fixed content, no conditional assembler). 
 2. MVZ and MVN instructions allow each input byte to be separated into hi order and low order bits.
 3. The TR instruction uses the table defined by HEXTBL to obtain a char representation.
 
