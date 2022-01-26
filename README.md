@@ -15,7 +15,7 @@ Uses IBM proc HLASMCLG to assemble, link and execute the source program.
 
 For simplicity, all modules reside in Z01427.JCL
 
-YREGS macros comes from SYS1.MACLIB (it is the basic register equates to clarify reg notation).
+YREGS macro comes from SYS1.MACLIB (it is the basic register equates to clarify reg notation).
 
 HEXTBL.MACRO
 ------------
