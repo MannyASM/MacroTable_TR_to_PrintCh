@@ -20,22 +20,19 @@ PGM13_JOB_OUTPUT.TXT
 --------------------
 SDSF job output from ASMT13. Job was executed in a z/OS 2.04 environment.
 
-For display purposes, WTO was utilized to display contents of CHARLIST (as output string).
- 
- The data to be converted is refered to by HEXLIST.
+The hex-char translate loop starts at location labeled TRNSLTXC. 
+CHARLIST stores the translated data.
+
+For display purposes, WTO was utilized to show the contents of CHARLIST.
+MSGLEN is a half word field preceding CHARLIST, and it specifies how many CHARLIST bytes to display.
+
+The data to be converted is refered to by HEXLIST.
  
      HEXLIST  DS    0CL8                    HEX BYTES TO CONVERT INTO CHAR                       
               DC    CL6'ABC123'                                                                  
               DC    XL2'04AF'      
  
- The hex-char translate loop starts at location labeled TRNSLTXC. 
- 
- CHARLIST contains the translated characters.
- 
- MSGLEN is a half word field preceding CHARLIST.
- MSGLEN specifies how many bytes to display by WTO. IN this case, 16 bytes are displayed starting at location CHARLIST.
- 
- The code is
+ The WTO code is setup and executed as follows:
  
      LA    R7,MSGLEN                                                                    
      WTO   TEXT=(R7) 
@@ -44,7 +41,8 @@ For display purposes, WTO was utilized to display contents of CHARLIST (as outpu
  
           10.13.15 JOB01141  +C1C2C3F1F2F304AF
  
- Also, PRINTOUT was used to further display some information. Thsi is a macro developed by John Ehrman (Assembler Language Programming for IBM System z™ Servers, Version 2.00)
+ Also, PRINTOUT was used to further display some information. 
+ This is a macro developed by John Ehrman (Assembler Language Programming for IBM System z™ Servers, Version 2.00)
 
 PGM13_LIST.TXT
 --------------
