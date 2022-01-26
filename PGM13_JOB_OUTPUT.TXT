@@ -1,0 +1,798 @@
+1                   J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  S V S C J E S 2        
+0 
+ 10.13.13 JOB01141 ---- WEDNESDAY, 26 JAN 2022 ----
+ 10.13.13 JOB01141  IRR010I  USERID Z01427   IS ASSIGNED TO THIS JOB.
+ 10.13.14 JOB01141  IEF677I WARNING MESSAGE(S) FOR JOB Z01427C  ISSUED
+ 10.13.14 JOB01141  ICH70001I Z01427   LAST ACCESS AT 10:10:31 ON WEDNESDAY, JANUARY 26, 2022
+ 10.13.14 JOB01141  $HASP373 Z01427C  STARTED - INIT 2    - CLASS H        - SYS S0W1
+ 10.13.14 JOB01141  -                                      -----TIMINGS (MINS.)------                          -----PAGING COUNTS----
+ 10.13.14 JOB01141  -STEPNAME PROCSTEP    RC   EXCP   CONN       TCB       SRB  CLOCK          SERV  WORKLOAD  PAGE  SWAP   VIO SWAPS
+ 10.13.14 JOB01141  -ASM      C           04    122     15       .00       .00     .0            26  BATCH        0     0     0     0
+ 10.13.15 JOB01141  -ASM      L           00     40      5       .00       .00     .0             8  BATCH        0     0     0     0
+ 10.13.15 JOB01141  +---> ASMT13:STARTING
+ 10.13.15 JOB01141  +C1C2C3F1F2F304AF
+ 10.13.15 JOB01141  +---> ASMT13:ENDING
+ 10.13.15 JOB01141  -ASM      G           00     15      1       .00       .00     .0             1  BATCH        0     0     0     0
+ 10.13.15 JOB01141  -Z01427C  ENDED.  NAME-ASMT13               TOTAL TCB CPU TIME=      .00 TOTAL ELAPSED TIME=    .0
+ 10.13.15 JOB01141  $HASP395 Z01427C  ENDED - RC=0004
+0------ JES2 JOB STATISTICS ------
+-  26 JAN 2022 JOB EXECUTION DATE
+-           98 CARDS READ
+-          801 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           59 SYSOUT SPOOL KBYTES
+-         0.01 MINUTES EXECUTION TIME
+         1 //Z01427C JOB TESTASMF,'ASMT13',                                        JOB01141
+           //        MSGCLASS=H,                                                           
+           //        CLASS=H,                                                              
+           //        NOTIFY=&SYSUID                                                        
+           //********************************************** TESTING STUFF                  
+           IEFC653I SUBSTITUTION JCL - TESTASMF,'ASMT13',MSGCLASS=H,CLASS=H,NOTIFY=Z01427
+         2 //ASM     EXEC PROC=HLASMCLG,                                                   
+           //        PARM.C=(LIST,USING(MAP))                                              
+         3 XXASMACLG  PROC                                                                 
+           XX*                                                                             
+           XX*********************************************************************         
+           XX*                                                                   *         
+           XX*  Licensed Materials - Property of IBM                             *         
+           XX*                                                                   *         
+           XX*  5696-234   5694-A01                                              *         
+           XX*                                                                   *         
+           XX*  Copyright IBM Corporation 1992, 2008 All Rights Reserved.        *         
+           XX*                                                                   *         
+           XX*  US Government Users Restricted Rights - Use, duplication         *         
+           XX*  or disclosure restricted by GSA ADP Schedule Contract            *         
+           XX*  with IBM Corp.                                                   *         
+           XX*                                                                   *         
+           XX*********************************************************************         
+           XX*                                                                   *         
+           XX*  ASMACLG                                                          *         
+           XX*                                                                   *         
+           XX*  This procedure runs the High Level Assembler, link-edits the     *         
+           XX*  newly assembled program and runs the program after the           *         
+           XX*  link-edit is accomplished.                                       *         
+           XX*                                                                   *         
+           XX*********************************************************************         
+           XX*                                                                             
+         4 XXC        EXEC PGM=ASMA90                                                      
+           XX*                                                                             
+         5 //C.SYSLIB DD DSN=SYS1.MACLIB,DISP=SHR                                          
+           X/SYSLIB   DD  DSN=SYS1.MACLIB,DISP=SHR                                         
+         6 //         DD DSN=Z01427.JCL,DISP=SHR                                           
+         7 //C.SYSUT1   DD SYSOUT=*                                                01510000
+           X/SYSUT1   DD  DSN=&&SYSUT1,SPACE=(16384,(120,120),,,ROUND),                    
+           X/             UNIT=SYSALLDA,BUFNO=1                                            
+         8 //C.SYSPRINT DD SYSOUT=*                                                01510000
+           X/SYSPRINT DD  SYSOUT=*                                                         
+         9 XXSYSLIN   DD  DSN=&&OBJ,SPACE=(3040,(40,40),,,ROUND),                          
+           XX             UNIT=SYSALLDA,DISP=(MOD,PASS),                                   
+           XX             BLKSIZE=3040,LRECL=80,RECFM=FB,BUFNO=1                           
+           XX*                                                                             
+        10 //SYSIN   DD *                                                                  
+        11 //C.WORKFILE DD SYSOUT=*                                                01510000
+        12 XXL        EXEC PGM=HEWL,PARM='MAP,LET,LIST',COND=(8,LT,C)                      
+           XX*                                                                             
+        13 XXSYSLIN   DD  DSN=&&OBJ,DISP=(OLD,DELETE)                                      
+        14 XX         DD  DDNAME=SYSIN                                                     
+        15 XXSYSLMOD  DD  DISP=(,PASS),UNIT=SYSALLDA,SPACE=(CYL,(1,1,1)),                  
+           XX             DSN=&&GOSET(GO)                                                  
+        16 XXSYSUT1   DD  DSN=&&SYSUT1,SPACE=(1024,(120,120),,,ROUND),                     
+           XX             UNIT=SYSALLDA,BUFNO=1                                            
+        17 XXSYSPRINT DD  SYSOUT=*                                                         
+           XX*                                                                             
+        18 XXG        EXEC PGM=*.L.SYSLMOD,COND=((8,LT,C),(8,LT,L))                        
+           XX*                                                                             
+        19 //G.SYSPRINT DD SYSOUT=*                                                01510000
+        20 //G.SYSUDUMP DD SYSOUT=*                                                01510000
+  STMT NO. MESSAGE
+         2 IEFC001I PROCEDURE HLASMCLG WAS EXPANDED USING SYSTEM LIBRARY VENDOR.PROCLIB
+        18 IEF686I DDNAME REFERRED TO ON DDNAME KEYWORD IN PRIOR STEP WAS NOT RESOLVED 
+ ICH70001I Z01427   LAST ACCESS AT 10:10:31 ON WEDNESDAY, JANUARY 26, 2022
+ IEFA111I Z01427C IS USING THE FOLLOWING JOB RELATED SETTINGS:
+          SWA=ABOVE,TIOT SIZE=32K,DSENQSHR=DISALLOW,GDGBIAS=JOB
+ IEF236I ALLOC. FOR Z01427C C ASM
+ IEF237I 1001 ALLOCATED TO SYSLIB
+ IGD103I SMS ALLOCATED TO DDNAME
+ IEF237I JES2 ALLOCATED TO SYSUT1
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IGD100I 0D31 ALLOCATED TO DDNAME SYSLIN   DATACLAS (        )
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IEF237I JES2 ALLOCATED TO WORKFILE
+ IEF142I Z01427C C ASM - STEP WAS EXECUTED - COND CODE 0004
+ IEF285I   SYS1.MACLIB                                  KEPT          
+ IEF285I   VOL SER NOS= VTMVSC.                            
+ IGD104I Z01427.JCL                                   RETAINED,  DDNAME=        
+ IEF285I   Z01427.Z01427C.JOB01141.D0000102.SYSUT1      SYSOUT        
+ IEF285I   Z01427.Z01427C.JOB01141.D0000103.?           SYSOUT        
+ IEF285I   SYS22026.T101314.RA000.Z01427C.OBJ.H01       PASSED        
+ IEF285I   VOL SER NOS= VPWRKB.                            
+ IEF285I   Z01427.Z01427C.JOB01141.D0000101.?           SYSIN         
+ IEF285I   Z01427.Z01427C.JOB01141.D0000104.?           SYSOUT        
+ IEF373I STEP/C       /START 2022026.1013
+ IEF032I STEP/C       /STOP  2022026.1013 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   256K  SYS:   248K  EXT:    32768K  SYS:    11452K
+         ATB- REAL:                  1080K  SLOTS:                     0K
+              VIRT- ALLOC:      18M SHRD:       0M
+ IEF236I ALLOC. FOR Z01427C L ASM
+ IEF237I 0D31 ALLOCATED TO SYSLIN
+ IEF237I DMY  ALLOCATED TO 
+ IGD100I 0D30 ALLOCATED TO DDNAME SYSLMOD  DATACLAS (        )
+ IGD100I 0D33 ALLOCATED TO DDNAME SYSUT1   DATACLAS (        )
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF142I Z01427C L ASM - STEP WAS EXECUTED - COND CODE 0000
+ IEF285I   SYS22026.T101314.RA000.Z01427C.OBJ.H01       DELETED       
+ IEF285I   VOL SER NOS= VPWRKB.                            
+ IEF285I   SYS22026.T101314.RA000.Z01427C.GOSET.H01     PASSED        
+ IEF285I   VOL SER NOS= VPWRKA.                            
+ IEF285I   SYS22026.T101314.RA000.Z01427C.SYSUT1.H01    DELETED       
+ IEF285I   VOL SER NOS= VPWRKD.                            
+ IEF285I   Z01427.Z01427C.JOB01141.D0000105.?           SYSOUT        
+ IEF373I STEP/L       /START 2022026.1013
+ IEF032I STEP/L       /STOP  2022026.1013 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   104K  SYS:   260K  EXT:     1768K  SYS:    11176K
+         ATB- REAL:                  1068K  SLOTS:                     0K
+              VIRT- ALLOC:      15M SHRD:       0M
+ IEF236I ALLOC. FOR Z01427C G ASM
+ IEF237I 0D30 ALLOCATED TO PGM=*.DD
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSUDUMP
+ ---> ASMT13:STARTING
+ C1C2C3F1F2F304AF
+ ---> ASMT13:ENDING
+ IEF142I Z01427C G ASM - STEP WAS EXECUTED - COND CODE 0000
+ IEF285I   SYS22026.T101314.RA000.Z01427C.GOSET.H01     KEPT          
+ IEF285I   VOL SER NOS= VPWRKA.                            
+ IEF285I   Z01427.Z01427C.JOB01141.D0000106.?           SYSOUT        
+ IEF285I   Z01427.Z01427C.JOB01141.D0000107.?           SYSOUT        
+ IEF373I STEP/G       /START 2022026.1013
+ IEF032I STEP/G       /STOP  2022026.1013 
+         CPU:     0 HR  00 MIN  00.00 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:    16K  SYS:   252K  EXT:        0K  SYS:    11176K
+         ATB- REAL:                  1068K  SLOTS:                     0K
+              VIRT- ALLOC:      15M SHRD:       0M
+ IEF237I 0D30 ALLOCATED TO SYS00001
+ IEF285I   SYS22026.T101315.RA000.Z01427C.R0110719      KEPT          
+ IEF285I   VOL SER NOS= VPWRKA.                            
+ IEF285I   SYS22026.T101314.RA000.Z01427C.GOSET.H01     DELETED       
+ IEF285I   VOL SER NOS= VPWRKA.                            
+ IEF375I  JOB/Z01427C /START 2022026.1013
+ IEF033I  JOB/Z01427C /STOP  2022026.1013 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1                                         High Level Assembler Option Summary                   (PTF UI78656)   Page    1            
+-                                                                                            HLASM R6.0  2022/01/26 10.13            
+0  No Overriding ASMAOPT Parameters                                                                                                  
+   Overriding Parameters-  LIST,USING(MAP)                                                                                           
+   No Process Statements                                                                                                             
+ 
+ 
+   Options for this Assembly                                                                                                         
+0                    NOADATA                                                                                                         
+                       ALIGN                                                                                                         
+                     NOASA                                                                                                           
+                       BATCH                                                                                                         
+                       CODEPAGE(047C)                                                                                                
+                     NOCOMPAT                                                                                                        
+                     NODATAMAP                                                                                                       
+                     NODBCS                                                                                                          
+                     NODECK                                                                                                          
+                       DXREF                                                                                                         
+                       ESD                                                                                                           
+                     NOEXIT                                                                                                          
+                       FAIL(NOMSG,NOMNOTE,MAXERRS(500))                                                                              
+                       FLAG(0,ALIGN,CONT,EXLITW,NOIMPLEN,NOLONGER,NOPAGE0,PUSH,RECORD,RENT,NOSIGNED,NOSUBSTR,NOTRUNC,                
+                            USING0)                                                                                                  
+                     NOFOLD                                                                                                          
+                     NOGOFF                                                                                                          
+                       ILMA                                                                                                          
+                     NOINFO                                                                                                          
+                       LANGUAGE(EN)                                                                                                  
+                     NOLIBMAC                                                                                                        
+                       LINECOUNT(60)                                                                                                 
+ 3 PARM/OPTION         LIST(121)                                                                                                     
+                       MACHINE(,NOLIST)                                                                                              
+                       MXREF(SOURCE)                                                                                                 
+                       OBJECT                                                                                                        
+                       OPTABLE(UNI,NOLIST)                                                                                           
+                     NOPCONTROL                                                                                                      
+                     NOPESTOP                                                                                                        
+                     NOPROFILE                                                                                                       
+                     NORA2                                                                                                           
+                     NORENT                                                                                                          
+                       RLD                                                                                                           
+                       RXREF                                                                                                         
+                       SECTALGN(8)                                                                                                   
+                       SIZE(MAX)                                                                                                     
+                     NOSUPRWARN                                                                                                      
+                       SYSPARM()                                                                                                     
+                     NOTERM                                                                                                          
+                     NOTEST                                                                                                          
+                       THREAD                                                                                                        
+                     NOTRANSLATE                                                                                                     
+                       TYPECHECK(MAGNITUDE,REGISTER,SIGNED)                                                                          
+ 3 PARM/OPTION         USING(NOLIMIT,MAP,WARN(15))                                                                                   
+                     NOWORKFILE                                                                                                      
+                       XREF(SHORT,UNREFS)                                                                                            
+ 
+   No Overriding DD Names                                                                                                            
+1                                              External Symbol Dictionary                                       Page    2            
+-Symbol   Type   Id     Address  Length   Owner Id Flags Alias-of                            HLASM R6.0  2022/01/26 10.13            
+0ASMT13    SD 00000001 00000000 00000398             00                                                                              
+ $$PRTOUT  ER 00000002                                                                                                               
+ $$IOSECT  SD 00000003 00000398 00000D5C             01                                                                              
+ $$READCD  LD          000003DC           00000003                                                                                   
+ $$PRTLIN  LD          000003A8           00000003                                                                                   
+ $$PRTOUT  LD          000003B4           00000003                                                                                   
+ $$DMPOUT  LD          00000398           00000003                                                                                   
+ $$CNVRTO  LD          000003C4           00000003                                                                                   
+ $$CNVRTI  LD          000003D0           00000003                                                                                   
+1                                                                                                               Page    3            
+   Active Usings: None                                                                                                               
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.13            
+0                                      1          TITLE '<MANNY-TEST> &SYSDATE / &SYSTIME'                                           
+          <MANNY-TEST> 01/26/22 / 10.13                                                                         Page    4            
+   Active Usings: None                                                                                                               
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.13            
+0                                      2          PRINT ON,NOGEN                                                                     
+ 000000                00000 00398     3 ASMT13   START 0                                                                            
+ 000000 90EC D00C            0000C     4          STM   R14,R12,12(R13)                                                              
+ 000004 0DC0                           5          BASR  R12,R0                                                                       
+                  R:C  00006           6          USING *,R12                                                                        
+ 000006 50D0 C30E            00314     7          ST    R13,SAVEA+4                                                                  
+ 00000A 182D                           8          LR    R2,R13                                                                       
+ 00000C 41D0 C30A            00310     9          LA    R13,SAVEA                                                                    
+ 000010 50D0 2008            00008    10          ST    R13,8(R0,R2)                                                                 
+                                      11 *------------------------------------------------------                                     
+                                      12 * WORK STATEMENTS                                                                           
+                                      13 *                                                                                           
+                                      14 *                                                                                           
+                                      15 *------------------------------------------------------                                     
+ 000014 A715 000E            00030    16          WTO   '---> ASMT13:STARTING'                                                       
+                                      25 *        TR    STRING,TABLE                                                                 
+                                      26 *        PRINTOUT STRING                                                                    
+                                      27 *-----------------------------                                                              
+ 000032 5800 C1EA            001F0    28 TRNSLTXC L     R0,HEXLEN               LOAD LEN OF HEX STRING TO TRANSL                     
+ 000036 41E0 C1E2            001E8    29          LA    R14,HEXLIST             LOAD ADR OF HEX STRING TO TRANSL                     
+ 00003A 41F0 C1F0            001F6    30          LA    R15,CHARLIST            LOAD ADR OF RCV AREA FOR TRANS                       
+000003E D300 C200 E000 00206 00000    32 NEXTCHAR MVZ   BYTE1,0(R14)            ISOLATE HIGH ORDER HEX DIGIT                         
+ 000044 D100 C201 E000 00207 00000    33          MVN   BYTE2,0(R14)            ISOLATE LOW  ORDER HEX DIGIT                         
+000004A DC00 C200 C20A 00206 00210    35 TRAN1    TR    BYTE1,HEXTBL            TRANSL HI ORDER HEX DIGIT TO CH                      
+ 000050 DC00 C201 C20A 00207 00210    36 TRAN2    TR    BYTE2,HEXTBL            TRANSL LO ORDER HEX DIGIT TO CH                      
+0000056 D200 F000 C200 00000 00206    38 MOVE1    MVC   0(,R15),BYTE1           MOV 1ST TRANSL HEX CHAR INTO RCV                     
+ 00005C D200 F001 C201 00001 00207    39 MOVE2    MVC   1(,R15),BYTE2           MOV 2ST TRANSL HEX CHAR INTO RCV                     
+0000062 41E0 E001            00001    41 INCR1    LA    R14,1(,R14)             INCR TO NEXT HEX BYTE                                
+ 000066 41F0 F002            00002    42 INCR2    LA    R15,2(,R15)             INCR TO NEXT RCV AREA SLOT                           
+000006A 1880                          44          LR    R8,X'00'                FLUSH BYTE1 AND BYTE2                                
+ 00006C 5080 C200            00206    45          ST    R8,BYTE1                                                                     
+ ** ASMA033I Storage alignment for BYTE1 unfavorable                                                                                 
+ ** ASMA435I Record 37 in Z01427.Z01427C.JOB01141.D0000101.? on volume:                                                              
+ 000070 5080 C201            00207    46          ST    R8,BYTE2                                                                     
+ ** ASMA033I Storage alignment for BYTE2 unfavorable                                                                                 
+ ** ASMA435I Record 38 in Z01427.Z01427C.JOB01141.D0000101.? on volume:                                                              
+0000074 4600 C038            0003E    48          BCT   R0,NEXTCHAR             TRANSL NEXT BYTE, DECR R0                            
+                                      49 *-----------------------------                                                              
+ 000078 0700                          50          PRINTOUT R0                                                                        
+                                      63+         Print OFF                Suppress this stuff                   02-$$GEN            
+ 0000A8 0700                         787          PRINTOUT HEXLEN               HEXLEN IS 8 BYTES                                    
+ 0000D8 0700                         799          PRINTOUT HEXLIST                                                                   
+ 000108 0700                         811          PRINTOUT CHARLIST                                                                  
+ ** ASMA042W Length attribute of symbol is unavailable; default=1 - CHARLIST                                                         
+ ** ASMA435I Record 78 in Z01427.JCL(PRINTOUT) on volume: ZXPM02                                                                     
+0000138 4170 C1EE            001F4   824          LA    R7,MSGLEN                                                                    
+ 00013C A715 003A            001B0   825          WTO   TEXT=(R7)                                                                    
+                                     863 *------------------------------------------------------                                     
+1         <MANNY-TEST> 01/26/22 / 10.13                                                                         Page    5            
+   Active Usings: ASMT13+X'6',R12                                                                                                    
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.13            
+0                      001C0         864 EXITPGM  EQU *                                                                              
+ 0001C0 A715 000D            001DA   865          WTO '---> ASMT13:ENDING'                                                           
+ 0001DC 58D0 C30E            00314   874          L     R13,SAVEA+4             POINT AT OLD SAVE AREA                               
+ 0001E0 98EC D00C            0000C   875          LM    R14,R12,12(R13)         RESTORE THE REGISTERS                                
+ 0001E4 17FF                         876          XR    R15,R15                 RETURN CODE = 0                                      
+ 0001E6 07FE                         877          BR    R14                                                                          
+                                     878 *--------------------------------------------------------------                             
+                                     879 * STORAGE                                                                                   
+                                     880 *--------------------------------------------------------------                             
+00001E8                              882 HEXLIST  DS    0CL8                    HEX BYTES TO CONVERT INTO CHAR                       
+ 0001E8 C1C2C3F1F2F3                 883          DC    CL6'ABC123'                                                                  
+ 0001EE 04AF                         884          DC    XL2'04AF'                                                                    
+00001F0 00000008                     886 HEXLEN   DC    A(*-HEXLIST)            LENGTH OF HEX STRING TO TRANS                        
+00001F4 0010                         888 MSGLEN   DC    H'16'                                                                        
+ 0001F6                              889 CHARLIST DS    CL(L'HEXLIST*2)         RECEIVE ARE FOR TRANS                                
+0000206 00                           891 BYTE1    DC    X'00'                                                                        
+ 000207 00                           892 BYTE2    DC    X'00'                                                                        
+0000208 030201                       894 STRING   DC    X'030201'                                                                    
+ 00020B FF01AABB00                   895 TABLE    DC    X'FF01AABB00'                                                                
+0000210 F0F1F2F3F4F5F6F7             897 HEXTBL   HEXTBL                                                                             
+0                                    915 REGSEQ   YREGS                         REG EQUATES                                          
+ 000310                              934 SAVEA    DS    18F                     SAVE AREA TO PRESERVE STATE                          
+ 000358                              935 SAVEB    DS    16F                                                                          
+0000398                              937          LTORG *                                                                            
+ 000000                              938          END   ASMT13                                                                       
+1                                                 Relocation Dictionary                                         Page    6            
+-   Pos.Id   Rel.Id   Address  Type    Length  Action                                        HLASM R6.0  2022/01/26 10.13            
+0  00000001 00000001 00000091   A         3       +                                                                                  
+   00000001 00000001 000000C1   A         3       +                                                                                  
+   00000001 00000001 000000F1   A         3       +                                                                                  
+   00000001 00000001 00000121   A         3       +                                                                                  
+   00000001 00000002 0000008C   V         4      ST                                                                                  
+   00000001 00000002 000000BC   V         4      ST                                                                                  
+   00000001 00000002 000000EC   V         4      ST                                                                                  
+   00000001 00000002 0000011C   V         4      ST                                                                                  
+   00000003 00000003 0000047D   A         3       +                                                                                  
+   00000003 00000003 00000871   A         3       +                                                                                  
+   00000003 00000003 00000875   A         3       +                                                                                  
+   00000003 00000003 00000879   A         3       +                                                                                  
+   00000003 00000003 0000087D   A         3       +                                                                                  
+   00000003 00000003 000008A5   A         3       +                                                                                  
+   00000003 00000003 00000901   A         3       +                                                                                  
+   00000003 00000003 00000905   A         3       +                                                                                  
+1                               Ordinary Symbol and Literal Cross Reference                                     Page    7            
+-Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2022/01/26 10.13            
+0$$            1 000003E8 00000003     U                   92  261M  267M  268M  269M  273B  283   286M  289M  293   295             
+                                                               302M  303M  305M  306M  308M  311M  314   316   327   329             
+                                                               337M  340   347M  353   358M  359M  360   360   363   368             
+                                                               369   373M  375M  375   376M  377   380M  381M  382   383             
+                                                               391M  392M  393M  395M  396M  396   397   397   400   405             
+                                                               406   412M  417M  418   421   422M  423   425M  426   430M            
+                                                               430   436M  437   441   442M  444M  444   459   460M  462             
+                                                               469M  470M  472   473M  475   478   481M  482M  483   484             
+                                                               485   490M  493M  493   494   496M  496   497M  499M  499             
+                                                               500   501   504M  505   506   508   510   515M  520   522             
+                                                               524M  524   528M  528   529M  529   532M  533M  533   534M            
+                                                               534   535   538   539M  545   547   549M  553M  554M  556             
+                                                               557M  558   563   565   567M  569M  570M  571   575M  576             
+                                                               580   585M  586M  587M  588   594   597M  599M  599   601M            
+                                                               603M  603   606   608M  610   626M  628M  628   629   630M            
+                                                               631M  632M  632   633M  635M  637   656M  657M  658M  661             
+                                                               664   670M  672   677   688M  691M  691   692   694M  694             
+                                                               695M  695   696M  696   698M  698   701   707   710   716M            
+                                                               719   726M  727M  727   728   731   732M  733M  733   734             
+                                                               735M  735   740M  741   742M  743   744M  744   745   746M            
+                                                               746   753   756   757   760   762M  764   771   772   780M            
+                                                               780   782M  782   783M  783                                           
+ $$ACALL       4 00000478 00000003     F  F                97  269M  696                                                             
+ $$ATLOC      10 0000059A 00000003     C  C               130  695   695   698M                                                      
+ $$CC          5 000004D8 00000003     C  C               118  508   508                                                             
+ $$CCV         1 000004DD 00000003     C  C               119  267M  268M                                                            
+ $$CNVRTI      4 000003D0 00000003     I                   83   68                                                                   
+ $$CNVRTO      4 000003C4 00000003     I                   80   68                                                                   
+ $$CVIAEn      4 0000049C 00000003     F  F               107  337M  425M  436M  441                                                 
+ $$CVIASt      4 00000498 00000003     F  F               106  303M  306M  311M  340   347M                                          
+ $$CVIErC      2 00000BEA 00000003     I                  435  297B  331B                                                            
+ $$CVIErN      6 00000BD6 00000003     I                  430  427B                                                                  
+ $$CVIErX      6 00000C0C 00000003     I                  444  438B                                                                  
+ $$CVIEr1      4 00000BC2 00000003     I                  425  284B  352B  356B  362B  364B  398B  401B                              
+ $$CVIEr2      2 00000BE8 00000003     I                  434  318B  319B  320B  321B                                                
+ $$CVIFlg      1 000004D7 00000003     X  X               117  286M  289M  302M  305M  308M  363   369   383   400   406             
+                                                               426   437                                                             
+ $$CVIM        4 000009E8 00000003     I                  305  300B                                                                  
+ $$CVIMC      39 00000516 00000003     C  C               125  444   444                                                             
+ $$CVIMN      46 0000053D 00000003     C  C               126  430   430                                                             
+ $$CVIM32      6 000004C1 00000003     P  P               112  360                                                                   
+ $$CVIM64     10 000004C7 00000003     P  P               113  397                                                                   
+ $$CVIP        4 000009DC 00000003     I                  302  299B                                                                  
+ $$CVIRet      4 00000C00 00000003     I                  441  374B  413B  424B  429B  440B                                          
+ $$CVISt1      2 000009B6 00000003     I                  292  288B  298B                                                            
+ $$CVISt2      2 00000A04 00000003     I                  313  304B  307B                                                            
+ $$CVISt3      2 00000A36 00000003     I                  326  312B  335B                                                            
+ $$CVISt4      2 00000A5C 00000003     I                  336  332B  333B  334B                                                      
+ $$CVISt6      6 00000AEC 00000003     I                  375  354B                                                                  
+ $$CVIS1A      4 000009F4 00000003     I                  308  301B                                                                  
+ $$CVIS4A      4 00000A6A 00000003     I                  341  346B                                                                  
+ $$CVIS4B      4 00000A80 00000003     I                  347  342B  344B                                                            
+ $$CVIS4C      4 00000A5E 00000003     I                  337  323B  325B                                                            
+ $$CVIS5A      4 00000AD2 00000003     I                  368  361B                                                                  
+ $$CVIS6B      2 00000B24 00000003     I                  387  378B                                                                  
+1                               Ordinary Symbol and Literal Cross Reference                                     Page    8            
+-Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2022/01/26 10.13            
+0$$CVIS6C      6 00000B74 00000003     I                  405  399B                                                                  
+ $$CVITbl    256 00000759 00000003     X  X               144  293   314   327                                                       
+ $$CVIV32      4 00000AE0 00000003     I                  372  367B  370B                                                            
+ $$CVIV64      2 00000B8A 00000003     I                  410  384B  386B  404B  407B  409B                                          
+ $$CVI64L      2 00000B98 00000003     I                  414  411B                                                                  
+ $$CVTO        4 00000C1E 00000003     I                  448  276B                                                                  
+ $$CVTOD       4 00000C5E 00000003     I                  465  456B                                                                  
+ $$CVTOF       6 00000C92 00000003     I                  478  466B                                                                  
+ $$CVTX        4 00000CBE 00000003     I                  488  452B  463B  476B                                                      
+ $$CVT4        4 0000104A 00000003     I                  731  461B  544B  598B                                                      
+ $$CVT8        6 0000106C 00000003     I                  740  474B  562B  602B                                                      
+ $$DC          5 0000050D 00000003     C  C               123  496                                                                   
+ $$DCBXIT      1 0000047C 00000003     X  X                98  196   238                                                             
+ $$DEC         4 00000E7A 00000003     I                  591  577B                                                                  
+ $$DECD        6 00000EA4 00000003     I                  601  592B                                                                  
+ $$DMPOUT      4 00000398 00000003     I                   69   67                                                                   
+ $$DUMP        4 00000ED0 00000003     I                  612  511B                                                                  
+ $$DUMPA       4 00000EFA 00000003     I                  626  643B                                                                  
+ $$DUMPB       6 00000F24 00000003     I                  635  640B                                                                  
+ $$DUMPTB      1 00000649 00000003     C  C               138  632                                                                   
+ $$DWORD       8 000004B0 00000003     D  D               110  359M  360   368   375M  375   381M  382   395M  396M  397             
+                                                               405   418   421   497M  499   504M  506   532M  534   570M            
+                                                               571   626M  628   635M  637   696M  698   732M  735   742M            
+                                                               746   782M  782   783M                                                
+ $$EFADDR      4 0000109E 00000003     I                  751  278B  281B  449B  454B  527B  613B  616B  646B  654B  675B            
+ $$EOF         4 00000FBC 00000003     I                  686  236                                                                   
+ $$EOFERR      6 00000FD0 00000003     I                  691  673B  687B                                                            
+ $$EX         27 0000056B 00000003     C  C               127  131   524M  691M  694   694                                           
+ $$FFF         4 00000470 00000003     A  A                95  757                                                                   
+ $$FLGS        1 000004D6 00000003     X  X               116   70M   77M  494   510   515M  520   576   580   594   606             
+                                                               658M                                                                  
+ $$FLGSIO      1 0000086E 00000003     X  X               156  661   670M  672   688M  707   716M  760   762M                        
+ $$FLG2        1 000004D5 00000003     X  X               115  490M  522   692                                                       
+ $$F000        4 00000474 00000003     A  A                96  753                                                                   
+ $$GETADD      4 00000D6E 00000003     I                  526  521B                                                                  
+ $$GPR         3 000004E9 00000003     C  C               121  528   528                                                             
+ $$HEXCV       6 000010E6 00000003     I                  782  498B  627B  636B  697B                                                
+ $$INDCB       4 000008E0 00000003     F  F               224  166   176   677                                                       
+ $$INOPN       4 00000F98 00000003     I                  671  662B                                                                  
+ $$IOSECT      1 00000398 00000003     J                   64   65    66                                                             
+ $$ISSYM       6 00000E3C 00000003     I                  575  566B                                                                  
+ $$LINP        4 00000F4C 00000003     I                  645  274B                                                                  
+ $$LOAD13      4 000003E4 00000003     I                   90   72B   75B   79B   82B   85B                                          
+ $$LOCP        1 00000028 00000003 A   U                  131  695M  698M                                                            
+ $$MOVE        6 00000940 00000003     I                  261   90B                                                                  
+ $$NOHDR       4 00000D28 00000003     I                  510  492B                                                                  
+ $$OPNOUT      4 000010BC 00000003     I                  760  272B  431B  445B                                                      
+ $$OPNRD       4 00000F86 00000003     I                  661  271B                                                                  
+ $$OUDCB       4 00000880 00000003     F  F               182  161   171   771                                                       
+ $$OUTBUF    121 000005A5 00000003     C  C               133  430M  444M  493M  496M  499M  500   524M  528M  529M  533M            
+                                                               534M  549M  567M  575M  585M  587M  588   599M  603M  628M            
+                                                               629   630M  631M  632M  633M  657M  691M  694M  695M  698M            
+                                                               719   727M  728   772   780M  780                                     
+ $$OUTLP       6 00000D3C 00000003     I                  515  607B                                                                  
+ $$PAT1        4 0000061E 00000003     X  X               134  533   533   534                                                       
+1                               Ordinary Symbol and Literal Cross Reference                                     Page    9            
+-Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2022/01/26 10.13            
+0$$PAT2       12 00000622 00000003     X  X               135  462   545   599   733   733   734   735                               
+ $$PAT3       21 0000062E 00000003     X  X               136  155   475   563   603   744   744   745   746                         
+ $$PAT4        6 00000643 00000003     X  X               137  505   505   506   507                                                 
+ $$PC         33 000004EC 00000003     C  C               122  493   493   499M  500                                                 
+ $$PEND       10 00000590 00000003     C  C               129  131   524   524                                                       
+ $$PHEX        4 0000101A 00000003     I                  719  542B  560B  573B  582B                                                
+ $$PNPUT       4 00000EB4 00000003     I                  604  546B  564B  574B  583B  590B  600B                                    
+ $$PODO        6 00000CC6 00000003     I                  490  275B                                                                  
+ $$PO0003      2 00000078 00000001     H  H                51   57                                                                   
+ $$PO0041      2 000000A8 00000001     H  H               788  794                                                                   
+ $$PO0043      2 000000D8 00000001     H  H               800  806                                                                   
+ $$PO0045      2 00000108 00000001     H  H               812  818                                                                   
+ $$PRCLOS      4 00000878 00000003     F  F               169  701                                                                   
+ $$PROPEN      4 00000870 00000003     F  F               159  764                                                                   
+ $$PRTLIN      4 000003A8 00000003     I                   73   67                                                                   
+ $$PRTOUT      4 000003B4 00000003     I                   76   67                                                                   
+ $$PRTOUT      1 00000000 00000002     T                   56   56   793   805   817                                                 
+ $$PUT         4 00000EB8 00000003     I                  605  660B                                                                  
+ $$PUTLIN      4 000010CE 00000003     I                  771  432B  446B  509B  605B  641B  699B                                    
+ $$RCVT       21 00000859 00000003     X  X               155  462   475   545   563   599   603   733M  734   735M  744M            
+                                                               745   746M                                                            
+ $$RDATA       8 000004A0 00000003     D  D               108  460M  470M  473M  482M  483   484   539M  554M  557M  558             
+                                                               597M  601M  731   741                                                 
+ $$RDCLOS      4 0000087C 00000003     F  F               174  710                                                                   
+ $$RDOPEN      4 00000874 00000003     F  F               164  664                                                                   
+ $$READCD      4 000003DC 00000003     I                   86   67                                                                   
+ $$REGS        4 00000430 00000003     F  F                94   69M   73M   76M   80M   83M   86M  261M  373M  412M  422M            
+                                                               442M  459   472   538   556   608M  610   756                         
+ $$REOF       10 00000586 00000003     C  C               128  691   691                                                             
+ $$RETURN      4 00000EC4 00000003     I                  608  443B  489B  514B  519B  644B  685B  690B                              
+ $$SAVG0       8 000004A8 00000003     D  D               109  376M  423   740M  743                                                 
+ $$ST         11 000004DE 00000003     C  C               120  501   501   502                                                       
+ $$STAR        4 00000D54 00000003     I                  520  517B                                                                  
+ $$SYM2        2 00000E60 00000003     H  H               584  581B                                                                  
+ $$TERM        4 00000FD6 00000003     I                  692  523B  525B                                                            
+ $$TERM1       4 00000FFE 00000003     I                  701  433B  447B  693B                                                      
+ $$TERM2       4 00001012 00000003     I                  716  708B                                                                  
+ $$TRTAB      16 00000749 00000003     C  C               143  485   727   783                                                       
+ $$TSTFLT      4 00000E14 00000003     I                  565  548B                                                                  
+ $$TSTGGR      4 00000DC8 00000003     I                  547  536B                                                                  
+ $$XQUOTE      4 00000512 00000003     C  C               124  478   529   529                                                       
+ $$XTemp       4 000004D1 00000003     X  X               114  392M  393M  396                                                       
+ $$15          2 00000490 00000003     H  H               103  353   377   535                                                       
+ $$31          2 00000492 00000003     H  H               104  283   547                                                             
+ $$47          2 00000494 00000003     H  H               105  565                                                                   
+ ASMT13        1 00000000 00000001     J                    3  785   938                                                             
+ BYTE1         1 00000206 00000001     X  X               891   32M   35M   38    45M                                                
+ BYTE2         1 00000207 00000001     X  X               892   33M   36M   39    46M                                                
+ CHARLIST     16 000001F6 00000001     C  C               889   30   819                                                             
+ HEXLEN        4 000001F0 00000001     A  A               886   28   795                                                             
+ HEXLIST       8 000001E8 00000001     C  C               882   29   807   886   889                                                 
+ HEXTBL       16 00000210 00000001     X  X               898   35    36                                                             
+ IHB0001A      2 00000030 00000001     H  H                23   19B                                                                  
+ IHB0047A      2 000001B0 00000001     H  H               856  828B                                                                  
+ IHB0049A      2 000001DA 00000001     H  H               872  868B                                                                  
+1                               Ordinary Symbol and Literal Cross Reference                                     Page   10            
+-Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2022/01/26 10.13            
+0MSGLEN        2 000001F4 00000001     H  H               888  824                                                                   
+ NEXTCHAR      6 0000003E 00000001     I                   32   48B                                                                  
+ R0            1 00000000 00000001 A   U                  917    5B   10    28M   48M   58                                           
+ R12           1 0000000C 00000001 A   U                  929    4     5M    6U  875M                                                
+ R13           1 0000000D 00000001 A   U                  930    4     7     8     9M   10   874M  875                               
+ R14           1 0000000E 00000001 A   U                  931    4    29M   32    33    41M   41   875M  877B                        
+ R15           1 0000000F 00000001 A   U                  932   30M   38    39    42M   42   876M  876                               
+ R2            1 00000002 00000001 A   U                  919    8M   10                                                             
+ R7            1 00000007 00000001 A   U                  924  824M  861                                                             
+ R8            1 00000008 00000001 A   U                  925   44M   45    46                                                       
+ SAVEA         4 00000310 00000001     F  F               934    7M    9   874                                                       
+1                                  Unreferenced Symbols Defined in CSECTs                                       Page   11            
+-  Defn  Symbol                                                                              HLASM R6.0  2022/01/26 10.13            
+0   864  EXITPGM                                                                                                                     
+     41  INCR1                                                                                                                       
+     42  INCR2                                                                                                                       
+     38  MOVE1                                                                                                                       
+     39  MOVE2                                                                                                                       
+    918  R1                                                                                                                          
+    927  R10                                                                                                                         
+    928  R11                                                                                                                         
+    920  R3                                                                                                                          
+    921  R4                                                                                                                          
+    922  R5                                                                                                                          
+    923  R6                                                                                                                          
+    926  R9                                                                                                                          
+    935  SAVEB                                                                                                                       
+    894  STRING                                                                                                                      
+    895  TABLE                                                                                                                       
+     35  TRAN1                                                                                                                       
+     36  TRAN2                                                                                                                       
+     28  TRNSLTXC                                                                                                                    
+1                                          Macro and Copy Code Source Summary                                   Page   12            
+- Con Source                                        Volume    Members                        HLASM R6.0  2022/01/26 10.13            
+0  L1 SYS1.MACLIB                                   VTMVSC    CLOSE    DCB      GET      IHBINNRA IHB01    OPEN     PUT              
+                                                              SYSSTATE WTO      YREGS                                                
+   L2 Z01427.JCL                                    ZXPM02    $$GENIO  HEXTBL   PRINTOUT                                             
+1                                                      Using Map                                                Page   13            
+-                                                                                            HLASM R6.0  2022/01/26 10.13            
+   Stmt  -----Location----- Action ----------------Using----------------- Reg Max     Last Label and Using Text                      
+           Count      Id           Type          Value    Range     Id        Disp    Stmt                                           
+0     6  00000006  00000001 USING  ORDINARY    00000006 00001000 00000001  12 0030E    874 *,R12                                     
+1                                   General Purpose Register Cross Reference                                    Page   14            
+- Register  References (M=modified, B=branch, U=USING, D=DROP, N=index)                      HLASM R6.0  2022/01/26 10.13            
+0    0(0)       4    28M   44    48M   69    73    76    80    83    86   264M  265M  266M  267   338M  339M  343   349M             
+              350   365M  366M  368M  371M  371   373   376   382M  385M  385   387M  388M  389   390M  391   402M  403M             
+              403   405M  408M  408   412   414M  416   418M  419   421M  422   423M  441M  442   459M  460   470   472M             
+              473   503M  504   530M  531M  532   550M  551   554   610M  620M  622   634M  640M  648   731M  732   740              
+              741M  742   743M  751M  752M  756M  757M  758   772M  875M                                                             
+     1(1)       4    19M   69    73    76    80    83    86    99    99   101   101   293M  314M  327M  348M  359   381              
+              392   394M  394N  395   419M  420M  422N  500M  501   502M  502   505   506   507M  507   508   610M  624M             
+              625   629M  637   639M  639   664M  677M  683   701M  710M  734M  735M  737M  738   745M  746M  748M  749              
+              764M  771M  778   828M  857   859N  861   868M  875M                                                                   
+     2(2)       4     8M   10    69    73    76    80    83    86   277M  279   280M  283   285   292M  292   293M  295M             
+              295N  296B  309M  310M  311   313M  313   314M  316M  316N  317B  326M  326   327M  329M  329N  330B  340M             
+              341   343   345M  345   347   348   349   350M  351   355   357M  358   377   379M  380   387   389M  394              
+              448M  450   451   453M  462   475   478   483   484   485   486   526M  531   535   537M  538M  538N  539              
+              547   551M  552M  553   555M  556M  556N  557   558M  565   568M  569   571M  587   593   596   601   610M             
+              612M  614   615M  618   621   622M  625M  626   631   635   638M  642   645M  653M  657   674M  722   724M             
+              724   752   753M  755M  756N  758M  875M                                                                               
+     3(3)       4    69    73    76    80    83    86   279M  293   294M  294   303   306   309   314   315M  315   322              
+              324   327   328M  328   336M  337   338   425   434M  435M  436   543   545   561   563   588M  589   593M             
+              596M  597   610M  648M  650   652M  655M  656   719M  722   723M  723   728M  729   875M                               
+     4(4)       4    69    73    76    80    83    86   285M  353   372M  373N  410M  410   414   415M  416M  417   610M             
+              647M  650   652   875M                                                                                                 
+     5(5)       4    69    73    76    80    83    86   610M  875M                                                                   
+     6(6)       4    69    73    76    80    83    86   610M  875M                                                                   
+     7(7)       4    69    73    76    80    83    86   272M  278M  281M  431M  432M  445M  446M  449M  454M  461M  474M             
+              498M  509M  527M  542M  544M  560M  562M  573M  582M  598M  602M  605M  610M  613M  616M  627M  636M  641M             
+              646M  654M  675M  697M  699M  730B  736B  739B  747B  750B  759B  761B  770B  781B  784B  824M  861   875M             
+     8(8)       4    44M   45    46    69    73    76    80    83    86   610M  623M  624   638   720M  721   725M  875M             
+     9(9)       4    69    73    76    80    83    86   450M  455   457M  458M  459N  465   467M  468M  469   471M  472N             
+              479M  480M  481   541M  559M  572M  578M  578   579M  586   588N  610M  614M  618   620   621M  642   720              
+              721M  726   728N  875M                                                                                                 
+    10(A)       4    69    73    76    80    83    86   263M  264   428   439   608   609   610M  674   686   875M                   
+    11(B)       4    69    73    76    80    83    86   262M  263   269   277   280   282M  282   448   453   488M  488              
+              490   491   497   503   512   513M  513   515   516   516   518M  518   526   575   579   591   604M  604              
+              608   610M  612   615   617M  617   645   653   659M  659   671M  671   689   875M                                     
+    12(C)       4     5M    6U   69    71M   73    74M   76    78M   80    81M   83    84M   86    87M   87   270M  270              
+              273N  610M  875M                                                                                                       
+    13(D)       4     7     8     9M   10    69    73    76    80    83    86    90M  261   267   268   269   273   283              
+              286   293   295   302   303   305   306   308   311   314   316   327   329   337   340   347   353   358              
+              359   360   360   363   368   369   373   375   376   377   380   381   382   383   391   392   395   396              
+              396   397   400   405   406   412   417   418   421   422   423   425   426   430   430   436   437   441              
+              442   444   444   459   460   462   469   470   472   473   475   478   481   482   483   484   485   490              
+              493   493   494   496   496   497   499   499   500   501   504   505   506   508   510   515   520   522              
+              524   524   528   528   529   529   532   533   533   534   534   535   538   539   545   547   549   553              
+              554   556   557   558   563   565   567   569   570   571   575   576   580   585   586   587   588   594              
+              597   599   599   601   603   603   606   608   610M  610   626   628   628   629   630   631   632   632              
+              633   635   637   656   657   658   661   664   670   672   677   688   691   691   692   694   694   695              
+              695   696   696   698   698   701   707   710   716   719   726   727   727   728   731   732   733   733              
+              734   735   735   740   741   742   743   744   744   745   746   746   753   756   757   760   762   764              
+              771   772   780   780   782   782   783   783   874M  875                                                              
+    14(E)       4    29M   32    33    41M   41    53    55M   60M   60    69    73    76    80    83    86   100B  102B             
+              261   262   287   289   290   291   610M  684M  779M  790   792M  797M  797   802   804M  809M  809   814              
+              816M  821M  821   857M  860M  875M  877B                                                                               
+    15(F)       4    30M   38    39    42M   42    53    54M   55B   60M   69    69    70    73    73    76    76    77              
+               80    80    83    83    86    86   610M  611B  682M  682   683M  684B  717M  717   777M  777   778M  779B             
+              790   791M  792B  797M  802   803M  804B  809M  814   815M  816B  821M  858M  858   859M  860   875M  876M             
+1                                   General Purpose Register Cross Reference                                    Page   15            
+- Register  References (M=modified, B=branch, U=USING, D=DROP, N=index)                      HLASM R6.0  2022/01/26 10.13            
+0             876                                                                                                                    
+1                                  Diagnostic Cross Reference and Assembler Summary                             Page   16            
+-                                                                                            HLASM R6.0  2022/01/26 10.13            
+0Statements Flagged                                                                                                                  
+0    45(P1,37), 46(P1,38), 818(L2:PRINTOUT,78)                                                                                       
+ 
+       3 Statements Flagged in this Assembly        4 was Highest Severity Code                                                      
+0HIGH LEVEL ASSEMBLER, 5696-234, RELEASE 6.0, PTF UI78656                                                                            
+0SYSTEM: z/OS 02.04.00              JOBNAME: Z01427C     STEPNAME: ASM        PROCSTEP: C                                            
+0Unicode Module:   ASMA047C   From Page     1148   To Page    17584           ECECP: International 1                                 
+ Data Sets Allocated for this Assembly                                                                                               
+  Con DDname   Data Set Name                                Volume  Member                                                           
+   P1 SYSIN    Z01427.Z01427C.JOB01141.D0000101.?                                                                                    
+   L1 SYSLIB   SYS1.MACLIB                                  VTMVSC                                                                   
+   L2          Z01427.JCL                                   ZXPM02                                                                   
+      SYSLIN   SYS22026.T101314.RA000.Z01427C.OBJ.H01       VPWRKB                                                                   
+      SYSPRINT Z01427.Z01427C.JOB01141.D0000103.?                                                                                    
+                                                                                                                                     
+   26880K allocated to Buffer Pool       Storage required     932K                                                                   
+      82 Primary Input Records Read         7427 Library Records Read                  0 Work File Reads                             
+       0 ASMAOPT Records Read                480 Primary Print Records Written         0 Work File Writes                            
+      82 Object Records Written                0 ADATA Records Written                                                               
+0Assembly Start Time: 10.13.14 Stop Time: 10.13.14 Processor Time: 00.00.00.0075                                                     
+ Return Code 004                                                                                                                     
+ 
+1z/OS V2 R4 BINDER     10:13:14 WEDNESDAY JANUARY 26, 2022                                                               
+ BATCH EMULATOR  JOB(Z01427C ) STEP(ASM     ) PGM= HEWL      PROCEDURE(L       )                                         
+ IEW2278I B352 INVOCATION PARAMETERS - MAP,LET,LIST                                                                      
+                                                                                                                         
+1                         *** M O D U L E  M A P ***                                                                     
+                                                                                                                         
+ ---------------                                                                                                         
+ CLASS  B_TEXT            LENGTH =     10F4  ATTRIBUTES = CAT,   LOAD, RMODE= 24                                         
+                          OFFSET =        0 IN SEGMENT 001     ALIGN = DBLWORD                                           
+ ---------------                                                                                                         
+                                                                                                                         
+  SECTION    CLASS                                      ------- SOURCE --------                                          
+   OFFSET   OFFSET  NAME                TYPE    LENGTH  DDNAME   SEQ  MEMBER                                             
+                                                                                                                         
+                 0  ASMT13             CSECT       398  SYSLIN    01  **NULL**                                           
+                                                                                                                         
+               398  $$IOSECT           CSECT       D5C  SYSLIN    01  **NULL**                                           
+        0      398     $$DMPOUT           LABEL                                                                          
+       10      3A8     $$PRTLIN           LABEL                                                                          
+       1C      3B4     $$PRTOUT           LABEL                                                                          
+       2C      3C4     $$CNVRTO           LABEL                                                                          
+       38      3D0     $$CNVRTI           LABEL                                                                          
+       44      3DC     $$READCD           LABEL                                                                          
+1          ***  DATA SET SUMMARY  ***                                                                                    
+                                                                                                                         
+ DDNAME    CONCAT   FILE IDENTIFICATION                                                                                  
+                                                                                                                         
+ SYSLIN      01     SYS22026.T101314.RA000.Z01427C.OBJ.H01                                                               
+                                                                                                                         
+           *** E N D  O F  M O D U L E  M A P ***                                                                        
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+                                 *** O P E R A T I O N   S U M M A R Y   R E P O R T ***                                 
+                                                                                                                         
+1PROCESSING OPTIONS:                                                                                                     
+                                                                                                                         
+    ALIASES             NO                                                                                               
+    ALIGN2              NO                                                                                               
+    AMODE               UNSPECIFIED                                                                                      
+    CALL                YES                                                                                              
+    CASE                UPPER                                                                                            
+    COMPAT              UNSPECIFIED                                                                                      
+    COMPRESS            AUTO                                                                                             
+    DCBS                NO                                                                                               
+    DYNAM               NO                                                                                               
+    EXTATTR             UNSPECIFIED                                                                                      
+    EXITS:              NONE                                                                                             
+    FILL                NONE                                                                                             
+    GID                 UNSPECIFIED                                                                                      
+    HOBSET              NO                                                                                               
+    INFO                NO                                                                                               
+    LET                 08                                                                                               
+    LINECT              060                                                                                              
+    LIST                SUMMARY                                                                                          
+    LISTPRIV            NO                                                                                               
+    LONGPARM            NO                                                                                               
+    MAP                 YES                                                                                              
+    MAXBLK              032760                                                                                           
+    MODMAP              NO                                                                                               
+    MSGLEVEL            00                                                                                               
+    OVLY                NO                                                                                               
+    PRINT               YES                                                                                              
+    RES                 NO                                                                                               
+    REUSABILITY         UNSPECIFIED                                                                                      
+    RMODE               UNSPECIFIED                                                                                      
+    RMODEX              NO                                                                                               
+    SIGN                NO                                                                                               
+    STORENX             NOREPLACE                                                                                        
+    STRIPCL             NO                                                                                               
+    STRIPSEC            NO                                                                                               
+    SYMTRACE                                                                                                             
+    TERM                NO                                                                                               
+    TRAP                ON                                                                                               
+    UID                 UNSPECIFIED                                                                                      
+    UPCASE              NO                                                                                               
+    WKSPACE             000000K,000000K                                                                                  
+    XCAL                NO                                                                                               
+    XREF                NO                                                                                               
+    ***END OF OPTIONS***                                                                                                 
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+1SAVE OPERATION SUMMARY:                                                                                                 
+                                                                                                                         
+    MEMBER NAME         GO                                                                                               
+    LOAD LIBRARY        SYS22026.T101314.RA000.Z01427C.GOSET.H01                                                         
+    PROGRAM TYPE        LOAD MODULE                                                                                      
+    VOLUME SERIAL       VPWRKA                                                                                           
+    MAX BLOCK           32760                                                                                            
+    DISPOSITION         ADDED NEW                                                                                        
+    TIME OF SAVE        10.13.15  JAN 26, 2022                                                                           
+                                                                                                                         
+                                                                                                                         
+1SAVE MODULE ATTRIBUTES:                                                                                                 
+                                                                                                                         
+    AC                  000                                                                                              
+    AMODE                24                                                                                              
+    COMPRESSION         NONE                                                                                             
+    DC                  NO                                                                                               
+    EDITABLE            YES                                                                                              
+    EXCEEDS 16MB        NO                                                                                               
+    EXECUTABLE          YES                                                                                              
+    LONGPARM            NO                                                                                               
+    MIGRATABLE          YES                                                                                              
+    OL                  NO                                                                                               
+    OVLY                NO                                                                                               
+    PACK,PRIME          NO,NO                                                                                            
+    PAGE ALIGN          NO                                                                                               
+    REFR                NO                                                                                               
+    RENT                NO                                                                                               
+    REUS                NO                                                                                               
+    RMODE                24                                                                                              
+    SCTR                NO                                                                                               
+    SIGN                NO                                                                                               
+    SSI                                                                                                                  
+    SYM GENERATED       NO                                                                                               
+    TEST                NO                                                                                               
+    XPLINK              NO                                                                                               
+    MODULE SIZE (HEX)   000010F8                                                                                         
+                                                                                                                         
+                                                                                                                         
+1 ENTRY POINT AND ALIAS SUMMARY:                                                                                         
+                                                                                                                         
+  NAME:            ENTRY TYPE AMODE C_OFFSET CLASS NAME        STATUS                                                    
+                                                                                                                         
+  ASMT13            MAIN_EP      24 00000000 B_TEXT                                                                      
+                                                                                                                         
+                          *** E N D   O F   O P E R A T I O N   S U M M A R Y   R E P O R T ***                          
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+1z/OS V2 R4 BINDER     10:13:14 WEDNESDAY JANUARY 26, 2022                                                               
+ BATCH EMULATOR  JOB(Z01427C ) STEP(ASM     ) PGM= HEWL      PROCEDURE(L       )                                         
+ IEW2008I 0F03 PROCESSING COMPLETED.  RETURN CODE =  0.                                                                  
+                                                                                                                         
+                                                                                                                         
+                                                                                                                         
+1----------------------                                                                                                  
+ MESSAGE SUMMARY REPORT                                                                                                  
+ ----------------------                                                                                                  
+  TERMINAL MESSAGES      (SEVERITY = 16)                                                                                 
+  NONE                                                                                                                   
+                                                                                                                         
+  SEVERE MESSAGES        (SEVERITY = 12)                                                                                 
+  NONE                                                                                                                   
+                                                                                                                         
+  ERROR MESSAGES         (SEVERITY = 08)                                                                                 
+  NONE                                                                                                                   
+                                                                                                                         
+  WARNING MESSAGES       (SEVERITY = 04)                                                                                 
+  NONE                                                                                                                   
+                                                                                                                         
+  INFORMATIONAL MESSAGES (SEVERITY = 00)                                                                                 
+  2008  2278                                                                                                             
+                                                                                                                         
+                                                                                                                         
+  **** END OF MESSAGE SUMMARY REPORT ****                                                                                
+                                                                                                                         
+ *** PRINTOUT requested at Address 007F80, Statement    50, CC=0                                                         
+ GPR   0  = X'00000000' =           0                                                                                    
+ *** PRINTOUT requested at Address 007FB0, Statement   787, CC=0                                                         
+ HEXLEN   = X'00000008'                                                                                                  
+ *** PRINTOUT requested at Address 007FE0, Statement   799, CC=0                                                         
+ HEXLIST  = C'ABC123ù'                                                                                                  
+ *** PRINTOUT requested at Address 008010, Statement   811, CC=0                                                         
+ CHARLIST = C'C'                                                                                                         

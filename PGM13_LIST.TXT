@@ -1,0 +1,214 @@
+1                                         High Level Assembler Option Summary                   (PTF UI78656)   Page    1
+-                                                                                            HLASM R6.0  2022/01/26 10.15
+0  No Overriding ASMAOPT Parameters
+   Overriding Parameters-  OBJECT,LIST,TEST
+   No Process Statements
+
+
+   Options for this Assembly
+0                    NOADATA
+                       ALIGN
+                       ASA
+                       BATCH
+                       CODEPAGE(047C)
+                     NOCOMPAT
+                     NODATAMAP
+                     NODBCS
+                     NODECK
+                       DXREF
+                       ESD
+                     NOEXIT
+                       FAIL(NOMSG,NOMNOTE,MAXERRS(500))
+                       FLAG(0,ALIGN,CONT,EXLITW,NOIMPLEN,NOLONGER,NOPAGE0,PUSH,RECORD,RENT,NOSIGNED,NOSUBSTR,NOTRUNC,
+                            USING0)
+                     NOFOLD
+                     NOGOFF
+                       ILMA
+                     NOINFO
+                       LANGUAGE(EN)
+                     NOLIBMAC
+                       LINECOUNT(60)
+ 3 PARM/OPTION         LIST(121)
+                       MACHINE(,NOLIST)
+                       MXREF(SOURCE)
+ 3 PARM/OPTION         OBJECT
+                       OPTABLE(UNI,NOLIST)
+                     NOPCONTROL
+                     NOPESTOP
+                     NOPROFILE
+                     NORA2
+                     NORENT
+                       RLD
+                       RXREF
+                       SECTALGN(8)
+                       SIZE(MAX)
+                     NOSUPRWARN
+                       SYSPARM()
+                     NOTERM
+ 3 PARM/OPTION         TEST
+                       THREAD
+                     NOTRANSLATE
+                       TYPECHECK(MAGNITUDE,REGISTER,SIGNED)
+                       USING(NOLIMIT,MAP,WARN(15))
+                     NOWORKFILE
+                       XREF(SHORT,UNREFS)
+
+   No Overriding DD Names
+1                                              External Symbol Dictionary                                       Page    2
+-Symbol   Type   Id     Address  Length   Owner Id Flags Alias-of                            HLASM R6.0  2022/01/26 10.15
+0PGM13     SD 00000001 00000000 000001D8             00
+1                                                                                                               Page    3
+   Active Usings: None
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.15
+0                                      1          TITLE '<MANNY-TEST> &SYSDATE / &SYSTIME'
+          <MANNY-TEST> 01/26/22 / 10.15                                                                         Page    4
+   Active Usings: None
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.15
+0                                      2          PRINT ON,NOGEN
+ 000000                00000 001D8     3 PGM13    START 0
+ 000000 90EC D00C            0000C     4          STM   R14,R12,12(R13)
+ 000004 0DC0                           5          BASR  R12,R0
+                  R:C  00006           6          USING *,R12
+ 000006 50D0 C18E            00194     7          ST    R13,SAVEA+4
+ 00000A 182D                           8          LR    R2,R13
+ 00000C 41D0 C18A            00190     9          LA    R13,SAVEA
+ 000010 50D0 2008            00008    10          ST    R13,8(R0,R2)
+                                      11 *------------------------------------------------------
+ 000014 5800 C06A            00070    12 TRNSLTXC L     R0,HEXLEN               LOAD LEN OF HEX STRING TO TRANSL
+ 000018 41E0 C060            00066    13          LA    R14,HEXLIST             LOAD ADR OF HEX STRING TO TRANSL
+ 00001C 41F0 C070            00076    14          LA    R15,CHARLIST            LOAD ADR OF RCV AREA FOR TRANS
+0000020 D300 C080 E000 00086 00000    16 NEXTCHAR MVZ   BYTE1,0(R14)            ISOLATE HIGH ORDER HEX DIGIT
+ 000026 D100 C081 E000 00087 00000    17          MVN   BYTE2,0(R14)            ISOLATE LOW  ORDER HEX DIGIT
+000002C DC00 C080 C08A 00086 00090    19 TRAN1    TR    BYTE1,HEXTBL            TRANSL HI ORDER HEX DIGIT TO CH
+ 000032 DC00 C081 C08A 00087 00090    20 TRAN2    TR    BYTE2,HEXTBL            TRANSL LO ORDER HEX DIGIT TO CH
+0000038 D200 F000 C080 00000 00086    22 MOVE1    MVC   0(,R15),BYTE1           MOV 1ST TRANSL HEX CHAR INTO RCV
+ 00003E D200 F001 C081 00001 00087    23 MOVE2    MVC   1(,R15),BYTE2           MOV 2ST TRANSL HEX CHAR INTO RCV
+0000044 41E0 E001            00001    25 INCR1    LA    R14,1(,R14)             INCR TO NEXT HEX BYTE
+ 000048 41F0 F002            00002    26 INCR2    LA    R15,2(,R15)             INCR TO NEXT RCV AREA SLOT
+000004C 1880                          28          LR    R8,X'00'                FLUSH BYTE1 AND BYTE2
+ 00004E 5080 C080            00086    29          ST    R8,BYTE1
+ ** ASMA033I Storage alignment for BYTE1 unfavorable
+ ** ASMA435I Record 29 in Z01427.TEMP.ASM on volume: ZXPL01
+ 000052 5080 C081            00087    30          ST    R8,BYTE2
+ ** ASMA033I Storage alignment for BYTE2 unfavorable
+ ** ASMA435I Record 30 in Z01427.TEMP.ASM on volume: ZXPL01
+0000056 4600 C01A            00020    32          BCT   R0,NEXTCHAR             TRANSL NEXT BYTE, DECR R0
+                                      33 *------------------------------------------------------
+                       0005A          34 EXITPGM  EQU *
+ 00005A 58D0 C18E            00194    35          L     R13,SAVEA+4             POINT AT OLD SAVE AREA
+ 00005E 98EC D00C            0000C    36          LM    R14,R12,12(R13)         RESTORE THE REGISTERS
+ 000062 17FF                          37          XR    R15,R15                 RETURN CODE = 0
+ 000064 07FE                          38          BR    R14
+                                      39 *--------------------------------------------------------------
+                                      40 * STORAGE
+                                      41 *--------------------------------------------------------------
+ 000066                               42 HEXLIST  DS    0CL8                    HEX BYTES TO CONVERT INTO CHAR
+ 000066 C1C2C3F1F2F3                  43          DC    CL6'ABC123'
+ 00006C 04AF                          44          DC    XL2'04AF'
+000006E 0000
+ 000070 00000008                      46 HEXLEN   DC    A(L'HEXLIST)            LENGTH OF HEX STRING TO TRANS
+0000074 0010                          48 MSGLEN   DC    H'16'
+ 000076                               49 CHARLIST DS    CL(L'HEXLIST*2)         RECEIVE ARE FOR TRANS
+0000086 00                            51 BYTE1    DC    X'00'
+1         <MANNY-TEST> 01/26/22 / 10.15                                                                         Page    5
+   Active Usings: PGM13+X'6',R12
+0  Loc  Object Code    Addr1 Addr2  Stmt   Source Statement                                  HLASM R6.0  2022/01/26 10.15
+0000087 00                            52 BYTE2    DC    X'00'
+0000088 030201                        54 STRING   DC    X'030201'
+ 00008B FF01AABB00                    55 TABLE    DC    X'FF01AABB00'
+0000090 F0F1F2F3F4F5F6F7              57 HEXTBL   HEXTBL
+0                                     75 REGSEQ   YREGS                         REG EQUATES
+ 000190                               94 SAVEA    DS    18F                     SAVE AREA TO PRESERVE STATE
+00001D8                               96          LTORG *
+ 000000                               97          END   PGM13
+1                               Ordinary Symbol and Literal Cross Reference                                     Page    6
+-Symbol   Length   Value     Id    R Type Asm  Program   Defn References                     HLASM R6.0  2022/01/26 10.15
+0BYTE1         1 00000086 00000001     X  X                51   16M   19M   22    29M
+ BYTE2         1 00000087 00000001     X  X                52   17M   20M   23    30M
+ CHARLIST     16 00000076 00000001     C  C                49   14
+ HEXLEN        4 00000070 00000001     A  A                46   12
+ HEXLIST       8 00000066 00000001     C  C                42   13    46    49
+ HEXTBL       16 00000090 00000001     X  X                58   19    20
+ NEXTCHAR      6 00000020 00000001     I                   16   32B
+ PGM13         1 00000000 00000001     J                    3   97
+ R0            1 00000000 00000001 A   U                   77    5B   10    12M   32M
+ R12           1 0000000C 00000001 A   U                   89    4     5M    6U   36M
+ R13           1 0000000D 00000001 A   U                   90    4     7     8     9M   10    35M   36
+ R14           1 0000000E 00000001 A   U                   91    4    13M   16    17    25M   25    36M   38B
+ R15           1 0000000F 00000001 A   U                   92   14M   22    23    26M   26    37M   37
+ R2            1 00000002 00000001 A   U                   79    8M   10
+ R8            1 00000008 00000001 A   U                   85   28M   29    30
+ SAVEA         4 00000190 00000001     F  F                94    7M    9    35
+1                                  Unreferenced Symbols Defined in CSECTs                                       Page    7
+-  Defn  Symbol                                                                              HLASM R6.0  2022/01/26 10.15
+0    34  EXITPGM
+     25  INCR1
+     26  INCR2
+     22  MOVE1
+     23  MOVE2
+     48  MSGLEN
+     78  R1
+     87  R10
+     88  R11
+     80  R3
+     81  R4
+     82  R5
+     83  R6
+     84  R7
+     86  R9
+     54  STRING
+     55  TABLE
+     19  TRAN1
+     20  TRAN2
+     12  TRNSLTXC
+1                                          Macro and Copy Code Source Summary                                   Page    8
+- Con Source                                        Volume    Members                        HLASM R6.0  2022/01/26 10.15
+0  L1 SYS1.MACLIB                                   VTMVSC    YREGS
+   L2 Z01427.JCL                                    ZXPM02    HEXTBL
+1                                                      Using Map                                                Page    9
+-                                                                                            HLASM R6.0  2022/01/26 10.15
+   Stmt  -----Location----- Action ----------------Using----------------- Reg Max     Last Label and Using Text
+           Count      Id           Type          Value    Range     Id        Disp    Stmt
+0     6  00000006  00000001 USING  ORDINARY    00000006 00001000 00000001  12 0018E     35 *,R12
+1                                   General Purpose Register Cross Reference                                    Page   10
+- Register  References (M=modified, B=branch, U=USING, D=DROP, N=index)                      HLASM R6.0  2022/01/26 10.15
+0    0(0)       4    12M   28    32M   36M
+     1(1)       4    36M
+     2(2)       4     8M   10    36M
+     3(3)       4    36M
+     4(4)       4    36M
+     5(5)       4    36M
+     6(6)       4    36M
+     7(7)       4    36M
+     8(8)       4    28M   29    30    36M
+     9(9)       4    36M
+    10(A)       4    36M
+    11(B)       4    36M
+    12(C)       4     5M    6U   36M
+    13(D)       4     7     8     9M   10    35M   36
+    14(E)       4    13M   16    17    25M   25    36M   38B
+    15(F)       4    14M   22    23    26M   26    36M   37M   37
+1                                  Diagnostic Cross Reference and Assembler Summary                             Page   11
+-                                                                                            HLASM R6.0  2022/01/26 10.15
+0Statements Flagged
+0    29(P1,29), 30(P1,30)
+
+       2 Statements Flagged in this Assembly        0 was Highest Severity Code
+0HIGH LEVEL ASSEMBLER, 5696-234, RELEASE 6.0, PTF UI78656
+0SYSTEM: z/OS 02.04.00              JOBNAME: Z01427      STEPNAME: DBPROCCG   PROCSTEP: DBPROCCG
+0Unicode Module:   ASMA047C   From Page     1148   To Page    17584           ECECP: International 1
+ Data Sets Allocated for this Assembly
+  Con DDname   Data Set Name                                Volume  Member
+   P1 SYSIN    Z01427.TEMP.ASM                              ZXPL01
+   L1 SYSLIB   SYS1.MACLIB                                  VTMVSC
+   L2          Z01427.JCL                                   ZXPM02
+   L3          Z01427.JCL                                   ZXPM02
+      SYSLIN   Z01427.OBJ                                   ZXPS01  PGM13
+      SYSPRINT Z01427.PGM13.LIST                            ZXPM06
+
+   23888K allocated to Buffer Pool       Storage required     200K
+      63 Primary Input Records Read           50 Library Records Read                  0 Work File Reads
+       0 ASMAOPT Records Read                214 Primary Print Records Written         0 Work File Writes
+      18 Object Records Written                0 ADATA Records Written
+0Assembly Start Time: 10.15.26 Stop Time: 10.15.26 Processor Time: 00.00.00.0008
+ Return Code 000
