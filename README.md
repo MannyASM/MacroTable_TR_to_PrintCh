@@ -24,7 +24,7 @@ SDSF job output from ASMT13.  Job was executed in a z/OS 2.04 environment.
 
 For display purposes, WTO was utilized to display contents of CHARLIST (as output string).
 
-PRINTOUT is a macro developed by John Ehrman (Assembler Language Programming for IBM System z™ Servers, Version 2.00)
+Also, PRINTOUT was used to further display some information. Thsi is a macro developed by John Ehrman (Assembler Language Programming for IBM System z™ Servers, Version 2.00)
 
 PGM13_LIST.TXT
 --------------
