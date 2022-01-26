@@ -43,7 +43,7 @@ The data to be converted is refered to by HEXLIST.
           10.13.15 JOB01141  +C1C2C3F1F2F304AF
  
  Also, PRINTOUT was used to further display some information. 
- This is a macro developed by John Ehrman (Assembler Language Programming for IBM System z™ Servers, Version 2.00)
+ This is a macro documented in "Assembler Language Programming for IBM System z™ Servers, Version 2.00", authored by John Ehrman. 
 
 PGM13_LIST.TXT
 --------------
