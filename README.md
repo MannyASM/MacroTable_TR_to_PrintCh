@@ -1,23 +1,24 @@
 # MacroTable_TR_to_PrintCh
-A working HLASM model showing how to convert from hex into character for display purposes.
-1. Uses HEXTBL macro to define a 256-byte table. 
+A working HLASM model showing how to convert hex data into character format for display purposes.
+1. Uses HEXTBL macro to define a 256-byte table (fixed content, no conditional asembler). 
 2. MVZ and MVN instructions allow each input byte to be separated into hi order and low order bits.
 3. The TR instruction uses the table defined by HEXTBL to obtain a char representation.
 
 Source:  Carmine Cannatello - "Advanced Assembler Language and MVS Interfaces" ISBN 0-471-50435-1
 
-Modules
+MODULES
+
 ASMT13.JCL
 ----------
 Uses IBM proc HLASMCLG to assemble, link and execute the source program.
 
 HEXTBL.MACRO
 ------------
-Contains a translation table used with the TR instruction.
+Contains the translation table used with the TR instruction.
 
 PGM13_JOB_OUTPUT.TXT
 --------------------
-SDSF job output from ASMT13.  Job was executed in a z/OS 2.04 environment.
+SDSF job output from ASMT13. Job was executed in a z/OS 2.04 environment.
 
 For display purposes, WTO was utilized to display contents of CHARLIST (as output string).
  
@@ -26,15 +27,19 @@ For display purposes, WTO was utilized to display contents of CHARLIST (as outpu
               DC    CL6'ABC123'                                                                  
               DC    XL2'04AF'      
  
- The logic loop to translate the data start at location TRNSLTXC. 
-  
- MSGLEN is a half word field preceding CHARLIST, which contains the translated characters.
- MSGLEN is used with WTO to display CHARLIST.
-     
+ The hex-char translate loop starts at location labeled TRNSLTXC. 
+ 
+ CHARLIST contains the translated characters.
+ 
+ MSGLEN is a half word field preceding CHARLIST.
+ MSGLEN specifies how many bytes to display by WTO. IN this case, 16 bytes are displayed starting at location CHARLIST.
+ 
+ The code is
+ 
      LA    R7,MSGLEN                                                                    
      WTO   TEXT=(R7) 
  
-      which displays
+     which displays
  
           10.13.15 JOB01141  +C1C2C3F1F2F304AF
  
@@ -43,4 +48,3 @@ For display purposes, WTO was utilized to display contents of CHARLIST (as outpu
 PGM13_LIST.TXT
 --------------
 The assembled listing of source program.
-
